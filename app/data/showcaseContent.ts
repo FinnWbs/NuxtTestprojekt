@@ -48,13 +48,6 @@ export const routeLinks: ShowcaseRouteLink[] = [
     to: '/features/data-fetching',
     eyebrow: 'useFetch Detail',
     description: 'Eine zweite Detailseite nutzt dieselbe dynamische Route.'
-  },
-  {
-    label: 'API JSON',
-    to: '/api/features',
-    eyebrow: 'Nitro API',
-    description: 'server/api/features.get.ts liefert direkt JSON.',
-    external: true
   }
 ]
 
@@ -101,14 +94,14 @@ useSeoMeta({
     target: 'routes',
     eyebrow: 'File-Based Routing',
     title: 'Routen direkt ausprobieren',
-    copy: 'Die Route-Karte zeigt echte Nuxt-Ziele: eine Page, dynamische Feature-Detailseiten und eine Nitro-API. Jeder Link fuehrt zu einer Route, die aus einer Datei entsteht.',
+    copy: 'Die Route-Karte zeigt echte Nuxt-Ziele: eine Page und dynamische Feature-Detailseiten. Jeder Link fuehrt zu einer Route, die aus einer Datei entsteht.',
     presentationTitle: 'Nuxt erzeugt Routen aus Dateien',
-    presentationSummary: 'Dieser Schritt zeigt die eigentliche Routing-Demo: NuxtLink navigiert zu Pages, ein dynamischer Slug rendert Detailseiten, und ein Nitro-Endpunkt liefert JSON.',
+    presentationSummary: 'Dieser Schritt zeigt die eigentliche Routing-Demo: NuxtLink navigiert zu Pages, und ein dynamischer Slug rendert Detailseiten.',
     whyItMatters: 'Nuxt macht Routing sichtbar und vorhersehbar. Lege Dateien unter app/pages oder server/api an, und Nuxt stellt daraus automatisch Browser- und API-Routen bereit.',
     takeaways: [
       'app/pages/routing.vue wird zu /routing.',
       'app/pages/features/[slug].vue wird zu /features/:slug.',
-      'server/api/features.get.ts wird zu /api/features.'
+      'Die sichtbaren Karten bleiben auf App-Seiten fokussiert.'
     ],
     codeFocus: 'Klicke die Route-Karte links: NuxtLink verbindet interne Seiten, der API-Link zeigt Nitro-JSON.',
     codeTitle: 'app/pages/routing.vue + app/pages/features/[slug].vue',

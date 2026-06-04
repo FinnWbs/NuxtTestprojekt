@@ -60,7 +60,6 @@ useSeoMeta({
             <NuxtLink to="/routing">
               Routing-Demo
             </NuxtLink>
-            <a href="/api/features">API JSON</a>
           </nav>
 
           <div class="route-workspace">

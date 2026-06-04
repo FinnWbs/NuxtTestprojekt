@@ -8,20 +8,19 @@ export const routingTourSteps: TourStep[] = [
     title: 'Navigation ohne Page Reload',
     copy: 'NuxtLink verbindet Seiten innerhalb der App. So bleibt Navigation schnell, barrierearm und kompatibel mit Nuxts Routing-System.',
     presentationTitle: 'NuxtLink verbindet deine Routen',
-    presentationSummary: 'Die Navigation oben zeigt echte Links zur Startseite, zur Routing-Demo und zur Nitro-API. Interne Links laufen über NuxtLink.',
+    presentationSummary: 'Die Navigation oben zeigt echte Links zur Startseite und zur Routing-Demo. Beide internen Links laufen über NuxtLink.',
     whyItMatters: 'NuxtLink nutzt Vue Router im Hintergrund. Dadurch navigiert die App clientseitig, kann aber trotzdem servergerendert ausgeliefert werden.',
     takeaways: [
       'NuxtLink ist für interne App-Routen gedacht.',
       'Aktive Links bekommen automatisch Router-Klassen.',
-      'Normale a-Tags bleiben sinnvoll für API- oder externe Ziele.'
+      'Die Demo-Navigation bleibt auf sichtbare Seiten fokussiert.'
     ],
-    codeFocus: 'Achte auf NuxtLink für interne Routen und a für den API-Endpunkt.',
+    codeFocus: 'Achte auf NuxtLink für interne Routen.',
     codeTitle: 'app/pages/routing.vue - Navigation',
     codeLanguage: 'vue',
     code: `<nav class="route-nav">
   <NuxtLink to="/">Aufgaben-Spotlight</NuxtLink>
   <NuxtLink to="/routing">Routing-Demo</NuxtLink>
-  <a href="/api/features">API JSON</a>
 </nav>`
   },
   {
@@ -110,7 +109,7 @@ export const featureDetailTourSteps: TourStep[] = [
     target: 'route-nav',
     eyebrow: 'Route Context',
     title: 'Zurück durch die Demo',
-    copy: 'Die Detailseite bleibt Teil der Demo-Navigation: zurück zur Startseite, zur Routing-Übersicht oder direkt zum API-JSON.',
+    copy: 'Die Detailseite bleibt Teil der Demo-Navigation: zurück zur Startseite oder zur Routing-Übersicht.',
     presentationTitle: 'Detailseiten bleiben verbunden',
     presentationSummary: 'Auch eine dynamische Detailseite nutzt NuxtLink und normale Links, damit der Präsentationsfluss nicht abreisst.',
     whyItMatters: 'Gute Routen-Demos zeigen nicht nur einzelne Seiten, sondern den Wechsel zwischen ihnen. NuxtLink hält diese Übergänge in der App.',
@@ -125,7 +124,6 @@ export const featureDetailTourSteps: TourStep[] = [
     code: `<nav class="route-nav">
   <NuxtLink to="/">Aufgaben-Spotlight</NuxtLink>
   <NuxtLink to="/routing">Routing-Demo</NuxtLink>
-  <a href="/api/features">API JSON</a>
 </nav>`
   },
   {
