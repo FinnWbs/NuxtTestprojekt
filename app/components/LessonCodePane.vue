@@ -7,11 +7,42 @@ defineProps<{
   currentStep: TourStep
   stepsLength: number
 }>()
+
+const isExpanded = ref(false)
+const panelId = 'lesson-code-panel'
+
+const togglePanel = () => {
+  isExpanded.value = !isExpanded.value
+}
 </script>
 
 <template>
-  <aside class="code-pane" aria-label="Spotlight-Quellcode">
-    <div class="code-panel">
+  <aside
+    class="code-pane"
+    :class="{ 'is-expanded': isExpanded, 'is-collapsed': !isExpanded }"
+    aria-label="Spotlight-Quellcode"
+  >
+    <button
+      class="code-pane-toggle"
+      type="button"
+      :aria-controls="panelId"
+      :aria-expanded="isExpanded"
+      :aria-label="isExpanded ? 'Info-Panel schliessen' : 'Info-Panel oeffnen'"
+      @click="togglePanel"
+      @keydown.enter.prevent="togglePanel"
+      @keydown.space.prevent="togglePanel"
+    >
+      <span class="toggle-label">
+        {{ isExpanded ? 'Schliessen' : 'Infos' }}
+      </span>
+    </button>
+
+    <div
+      v-show="isExpanded"
+      :id="panelId"
+      class="code-panel"
+      :aria-hidden="!isExpanded"
+    >
       <div class="lesson-header">
         <span class="step-count">
           Schritt {{ activeStep + 1 }} / {{ stepsLength }}
@@ -35,14 +66,6 @@ defineProps<{
           <p>{{ currentStep.whyItMatters }}</p>
         </section>
 
-        <section class="takeaway-grid" aria-label="Wichtige Erkenntnisse">
-          <article
-            v-for="takeaway in currentStep.takeaways"
-            :key="takeaway"
-          >
-            {{ takeaway }}
-          </article>
-        </section>
       </div>
 
       <section class="code-section" aria-label="Quellcode-Fokus">
@@ -55,10 +78,6 @@ defineProps<{
           </div>
           <span>{{ currentCodeExample.codeLanguage }}</span>
         </div>
-
-        <p class="code-context">
-          {{ currentStep.codeFocus }}
-        </p>
 
         <pre><code>{{ currentCodeExample.code }}</code></pre>
       </section>

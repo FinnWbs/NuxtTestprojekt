@@ -84,18 +84,17 @@ export const tourSteps: TourStep[] = [
     codeFocus: 'Achte auf Root-Shell, Auto-Import-Komponente und Hydration-Status.',
     codeTitle: 'app/app.vue + app/components/ShowcaseHero.vue',
     codeLanguage: 'vue',
-    code: `useSeoMeta({
-  title: 'Nuxt Aufgaben-Spotlight',
-  description: 'Eine geführte Aufgaben-App'
+    code: `<script setup>
+const { startTour } = useTodoShowcase()
+
+useSeoMeta({
+  title: 'Aufgaben-Spotlight'
 })
+</script>
 
-const { isHydrated, featureTags, startTour } = useTodoShowcase()
-
-<ShowcaseHero
-  :feature-tags="featureTags"
-  :is-hydrated="isHydrated"
-  @start="startTour"
-/>`
+<template>
+  <ShowcaseHero @start="startTour" />
+</template>`
   },
   {
     key: 'routes',
@@ -114,16 +113,18 @@ const { isHydrated, featureTags, startTour } = useTodoShowcase()
     codeFocus: 'Klicke die Route-Karte links: NuxtLink verbindet interne Seiten, der API-Link zeigt Nitro-JSON.',
     codeTitle: 'app/pages/routing.vue + app/pages/features/[slug].vue',
     codeLanguage: 'vue',
-    code: `<NuxtLink to="/routing">
+    code: `<!-- app/pages/routing.vue wird zu /routing -->
+<NuxtLink to="/routing">
   Routing-Demo
 </NuxtLink>
 
+<!-- app/pages/features/[slug].vue liest den Slug -->
 <NuxtLink to="/features/routing">
   Feature: Routing
 </NuxtLink>
 
 const route = useRoute()
-const slug = computed(() => String(route.params.slug))`
+const slug = route.params.slug`
   },
   {
     key: 'composer',
@@ -147,7 +148,13 @@ const slug = computed(() => String(route.params.slug))`
 const addTodo = () => {
   const title = newTodo.value.trim()
   if (!title) return
-  todos.value = [{ id: Date.now(), title, done: false, nuxtFeature: 'Reaktive Nutzereingabe' }, ...todos.value]
+
+  todos.value.unshift({
+    id: Date.now(),
+    title,
+    done: false
+  })
+
   newTodo.value = ''
 }
 
@@ -173,17 +180,17 @@ const addTodo = () => {
     codeFocus: 'Beachte die Trennung zwischen Berechnung im Composable und Darstellung in TodoStats.',
     codeTitle: 'app/composables/useTodoShowcase.ts',
     codeLanguage: 'ts',
-    code: `const completedCount = computed(() =>
-  todos.value.filter((todo) => todo.done).length
+    code: `const done = computed(() =>
+  todos.value.filter((todo) => todo.done)
 )
 
-const activeCount = computed(() =>
-  todos.value.length - completedCount.value
+const open = computed(() =>
+  todos.value.filter((todo) => !todo.done)
 )
 
 const completionRate = computed(() =>
   todos.value.length
-    ? Math.round((completedCount.value / todos.value.length) * 100)
+    ? Math.round(done.value.length / todos.value.length * 100)
     : 0
 )`
   },
@@ -204,18 +211,21 @@ const completionRate = computed(() =>
     codeFocus: 'Vergleiche activeFilter, filteredTodos und das setFilter-Event.',
     codeTitle: 'app/composables/useTodoShowcase.ts + TodoFilters.vue',
     codeLanguage: 'vue',
-    code: `const activeFilter = ref<Filter>('all')
+    code: `type Filter = 'all' | 'active' | 'done'
+
+const activeFilter = ref<Filter>('all')
 
 const filteredTodos = computed(() => {
-  if (activeFilter.value === 'active') return todos.value.filter((todo) => !todo.done)
-  if (activeFilter.value === 'done') return todos.value.filter((todo) => todo.done)
-  return todos.value
-})
+  if (activeFilter.value === 'active') {
+    return todos.value.filter((todo) => !todo.done)
+  }
 
-<TodoFilters
-  :active-filter="activeFilter"
-  @set-filter="setFilter"
-/>`
+  if (activeFilter.value === 'done') {
+    return todos.value.filter((todo) => todo.done)
+  }
+
+  return todos.value
+})`
   },
   {
     key: 'list',
@@ -234,17 +244,16 @@ const filteredTodos = computed(() => {
     codeFocus: 'Achte darauf, wie useState, Events und Client-Persistenz zusammenspielen.',
     codeTitle: 'app/composables/useTodoShowcase.ts',
     codeLanguage: 'ts',
-    code: `const todos = useState<Todo[]>('showcase-todos-de', () =>
-  initialTodos.map((todo) => ({ ...todo }))
-)
+    code: `const todos = useState('todos', () => initialTodos)
 
 const toggleTodo = (id: number) => {
-  todos.value = todos.value.map((todo) =>
-    todo.id === id ? { ...todo, done: !todo.done } : todo
-  )
+  const todo = todos.value.find((item) => item.id === id)
+  if (todo) todo.done = !todo.done
 }
 
-watch(todos, persistTodos, { deep: true })`
+if (import.meta.client) {
+  watch(todos, saveToLocalStorage, { deep: true })
+}`
   },
   {
     key: 'tools',
@@ -268,12 +277,9 @@ watch(todos, persistTodos, { deep: true })`
   devtools: { enabled: true }
 })
 
-export const tourSteps: TourStep[] = [
-  {
-    target: 'tools',
-    title: 'Gebaut für Nuxt DevTools',
-    codeTitle: 'nuxt.config.ts + app/data/showcaseContent.ts'
-  }
-]`
+// Nuxt findet diese Ordner automatisch:
+// app/pages       -> Routen
+// app/components  -> Komponenten
+// server/api      -> API-Endpunkte`
   }
 ]
